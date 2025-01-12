@@ -16,8 +16,8 @@ const SPEED_UPGRADE_COST = 3;
 const FIRE_RATE_UPGRADE_COST = 4;
 const SPEED_UPGRADE_AMOUNT = 1;
 const FIRE_RATE_REDUCTION = 100; // Reduces cooldown by 50ms
-const DEV_MODE = true; // Set to false before release
-const GOD_MODE = true; // Set to true for invulnerability
+const DEV_MODE = false; // Set to false before release
+const GOD_MODE = false; // Set to true for invulnerability
 
 // Add constant for level when blue enemies start appearing
 const BLUE_ENEMIES_START_LEVEL = 8;

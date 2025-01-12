@@ -13,3 +13,5 @@ A space shooter game built with JavaScript.
 - Left/Right Arrow Keys: Move
 - Space: Shoot
 - Enter: Continue/Retry 
+
+git remote add origin https://github.com/ThatPandaYouHate/Space-Rouge.git
