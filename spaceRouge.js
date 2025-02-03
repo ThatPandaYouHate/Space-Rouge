@@ -16,7 +16,7 @@ const SPEED_UPGRADE_COST = 3;
 const FIRE_RATE_UPGRADE_COST = 4;
 const SPEED_UPGRADE_AMOUNT = 1;
 const FIRE_RATE_REDUCTION = 100; // Reduces cooldown by 50ms
-const DEV_MODE = false; // Set to false before release
+const DEV_MODE = true; // Set to false before release
 const GOD_MODE = false; // Set to true for invulnerability
 
 // Add constant for level when blue enemies start appearing
@@ -40,12 +40,34 @@ let lives = STARTING_LIVES;
 let currentLevelAttempts = 0;
 const MAX_LEVEL_ATTEMPTS = 3;
 
+// Add these constants at the top
+const TARGET_FPS = 60;
+const TIME_STEP = 1000 / TARGET_FPS;
+let lastFrameTime = 0;
+
 // Canvas setup
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
 document.body.appendChild(canvas);
+
+// Add these at the start of your file, after canvas creation
+canvas.style.imageRendering = 'pixelated';  // Better pixel art rendering
+ctx.imageSmoothingEnabled = false;  // Disable anti-aliasing
+
+// Optional: Use the OffscreenCanvas for better performance in modern browsers
+let offscreenCanvas;
+let offscreenCtx;
+try {
+    offscreenCanvas = new OffscreenCanvas(canvas.width, canvas.height);
+    offscreenCtx = offscreenCanvas.getContext('2d');
+    offscreenCtx.imageSmoothingEnabled = false;
+} catch(e) {
+    console.log('OffscreenCanvas not supported');
+    offscreenCanvas = canvas;
+    offscreenCtx = ctx;
+}
 
 // Game variables
 const player = {
@@ -693,7 +715,11 @@ function drawRespawnScreen() {
 }
 
 // Update gameLoop to show respawn screen
-function gameLoop() {
+function gameLoop(timestamp) {
+    // Calculate delta time
+    const deltaTime = timestamp - lastFrameTime;
+    const timeMultiplier = deltaTime / TIME_STEP;
+    
     if(gameOver) {
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -760,6 +786,7 @@ function gameLoop() {
     updateEnemies();
     checkCollisions();
 
+    lastFrameTime = timestamp;
     animationFrameId = requestAnimationFrame(gameLoop);
 }
 
@@ -787,6 +814,7 @@ function initializeGame() {
     if(animationFrameId) {
         cancelAnimationFrame(animationFrameId);
     }
+    lastFrameTime = performance.now();
     animationFrameId = requestAnimationFrame(gameLoop);
 }
 
