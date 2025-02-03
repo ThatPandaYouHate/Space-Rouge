@@ -1,4 +1,5 @@
 // Game constants - define these first
+// Hi github
 const PLAYER_SPEED = 3;
 const BULLET_SPEED = 7;
 const ENEMY_BASE_SPEED = 2;
